@@ -13,19 +13,32 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Check out code
+      - name: 🔽 Check out code
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: 🟢 Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm install
 
-      - name: Build Installer
+      - name: 🏗 Build Installer
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx electron-builder --win nsis --publish always
+
+      - name: 🧹 Cleanup note
+        run: echo "No cleanup needed – electron-builder uploads files automatically"
+
+      - name: ✨ Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/*.exe
+            dist/latest.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
