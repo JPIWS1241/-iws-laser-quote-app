@@ -1,19 +1,14 @@
 const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
+const log = require("electron-log");
 
-// ================= STREAMLIT URL =====================
-const STREAMLIT_URL = "https://iws-laser-quote.streamlit.app";
-// ======================================================
-
-// REQUIRED FIXES
-autoUpdater.allowDowngrade = true;
+// ---------------- LOGGING ----------------
+autoUpdater.logger = log;
+log.transports.file.level = "info";
 autoUpdater.autoDownload = false;
 
-// LOGGING
-autoUpdater.logger = require("electron-log");
-autoUpdater.logger.transports.file.level = "info";
-
+// ---------------- CREATE WINDOW ----------------
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
@@ -22,49 +17,54 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, "preload.js") }
   });
 
-  console.log("🌎 Loading Streamlit:", STREAMLIT_URL);
-  win.loadURL(STREAMLIT_URL);
+  win.loadURL("https://iws-laser-quote.streamlit.app");
 }
 
-// APP READY
+// ---------------- START APP ----------------
 app.whenReady().then(() => {
-  console.log("🔧 App ready. Checking updates…");
   createWindow();
-  setTimeout(() => autoUpdater.checkForUpdates(), 4000);
+
+  setTimeout(() => {
+    log.info("🔍 Checking for updates...");
+    autoUpdater.checkForUpdates();
+  }, 4000);
 });
 
-// UPDATE AVAILABLE
-autoUpdater.on("update-available", info => {
-  console.log("🟢 Update available:", info.version);
+// ---------------- UPDATE AVAILABLE ----------------
+autoUpdater.on("update-available", (info) => {
+  log.info("🟢 Update available:", info.version);
 
   dialog.showMessageBox({
     type: "info",
-    title: "Update Available",
-    message: `Version ${info.version} is available.\nDownload now?`,
-    buttons: ["Yes", "No"]
+    title: "New Update Available",
+    message: `Version ${info.version} is available.\nInstall now?`,
+    buttons: ["Yes", "Later"]
   }).then(result => {
-    if (result.response === 0) autoUpdater.downloadUpdate();
+    if (result.response === 0) {
+      autoUpdater.downloadUpdate();
+    }
   });
 });
 
-// UPDATE DOWNLOADED
+// ---------------- UPDATE DOWNLOADED ----------------
 autoUpdater.on("update-downloaded", () => {
-  console.log("📦 Update downloaded");
+  log.info("📦 Update downloaded");
+
   dialog.showMessageBox({
-    title: "Install Update",
-    message: "Update ready. Restart now?",
+    title: "Restart Required",
+    message: "Update downloaded. Restart now?",
     buttons: ["Restart", "Later"]
   }).then(result => {
     if (result.response === 0) autoUpdater.quitAndInstall();
   });
 });
 
-// NO UPDATE
-autoUpdater.on("update-not-available", info => {
-  console.log("❌ No update. Current:", app.getVersion(), "Latest:", info.version);
+// ---------------- NO UPDATE ----------------
+autoUpdater.on("update-not-available", (info) => {
+  log.info("❌ No update found. Current:", app.getVersion());
 });
 
-// ERROR
-autoUpdater.on("error", err => {
-  console.error("❗ AutoUpdater Error:", err);
+// ---------------- ERROR ----------------
+autoUpdater.on("error", (err) => {
+  log.error("❗ AutoUpdater ERROR:", err);
 });
