@@ -1,0 +1,36 @@
+{
+  "name": "iws-laser-quote-app",
+  "version": "1.0.0",
+  "description": "IWS Laser Quote App - local working version",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --publish never"
+  },
+  "author": "IWS",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^25.9.8",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.iws.laserquote",
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": ["nsis"]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "JPIWS1241",
+        "repo": "-iws-laser-quote-app"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JPIWS1241/-iws-laser-quote-app.git"
+  }
+}

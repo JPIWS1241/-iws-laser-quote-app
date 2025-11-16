@@ -1,0 +1,5 @@
+[
+  {"name":"Mild Steel","price_per_sq_in":0.02,"cut_per_inch":0.08,"pierce_cost":0.25},
+  {"name":"Stainless Steel","price_per_sq_in":0.03,"cut_per_inch":0.10,"pierce_cost":0.35},
+  {"name":"Aluminum","price_per_sq_in":0.025,"cut_per_inch":0.07,"pierce_cost":0.20}
+]
