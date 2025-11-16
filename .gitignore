@@ -1,0 +1,21 @@
+# Do NOT track build output
+/dist
+/win-unpacked
+/*.exe
+*.zip
+*.asar
+*.blockmap
+
+# Do NOT track dependencies
+/node_modules
+/python
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Ignore logs
+*.log
+
+# Ignore staging artifacts
+*.old

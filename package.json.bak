@@ -1,0 +1,65 @@
+{
+  "name": "iws-laser-quote-app",
+  "version": "1.0.7",
+  "description": "Independent Welding Services — Laser Quote App (Electron wrapper)",
+  "main": "main.js",
+  "author": "Independent Welding Services LLC",
+  "license": "MIT",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JPIWS1241/iws-laser-quote-app.git"
+  },
+
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win nsis"
+  },
+
+  "build": {
+    "appId": "com.iws.laserquote",
+    "productName": "IWS Laser Quote",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "start-app.ps1",
+      "python/**/*",
+      "IWS_logo.ico",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "python/",
+        "to": "python",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "IWS_logo.ico"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "JPIWS1241",
+        "repo": "iws-laser-quote-app"
+      }
+    ]
+  },
+
+  "dependencies": {
+    "electron-log": "^5.4.3",
+    "electron-updater": "^6.6.2"
+  },
+
+  "devDependencies": {
+    "electron": "^25.9.8",
+    "electron-builder": "^24.13.3"
+  }
+}
