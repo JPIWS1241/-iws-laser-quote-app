@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Check out code
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -22,9 +22,11 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
+        working-directory: electron-app
         run: npm install
 
       - name: Build & Publish
+        working-directory: electron-app
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx electron-builder --win nsis --publish always
